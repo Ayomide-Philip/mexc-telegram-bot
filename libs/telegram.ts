@@ -39,7 +39,10 @@ export async function startTelegramListener() {
 
       const text = event.message.message;
       console.log("New signal:", parseSignal(text));
-      state.signals.push({ ...parseSignal(text, Date.now()) });
+      const parsedSignal = parseSignal(text, Date.now());
+      if (parsedSignal) {
+        state.signals.push(parsedSignal);
+      }
     },
     new NewMessage({
       chats: [-1002004401199, -1002429499066, "testingtelegramsignals"],

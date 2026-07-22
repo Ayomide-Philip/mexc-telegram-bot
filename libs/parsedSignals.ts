@@ -1,13 +1,15 @@
-export type ParsedSignal = {
-  symbol: string | null;
-  side: "long" | "short" | null;
-  entry: string | null; // "CMP" or a number/range as a string
-  stopLoss: number | null;
-  takeProfits: number[];
-  leverage: string | null;
-  raw: string;
-  ts?: number; // timestamp when the signal was parsed
-};
+export type ParsedSignal =
+  | {
+      symbol: string | null;
+      side: "long" | "short" | null;
+      entry: string | null;
+      stopLoss: number | null;
+      takeProfits: number[];
+      leverage: string | null;
+      raw: string;
+      ts?: number;
+    }
+  | undefined;
 
 export function parseSignal(raw: string, ts?: number): ParsedSignal {
   const text = raw;
@@ -16,6 +18,8 @@ export function parseSignal(raw: string, ts?: number): ParsedSignal {
   const symbolMatch =
     text.match(/\$([A-Za-z0-9]+)/) || text.match(/([A-Za-z0-9]+)\s*\/USDT/i);
   const symbol = symbolMatch ? symbolMatch[1].toUpperCase() : null;
+
+  if (!symbol) return;
 
   // Side
   const side = /short/i.test(text)
