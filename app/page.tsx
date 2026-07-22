@@ -87,8 +87,6 @@ export default function Dashboard() {
     setExpanded(new Set());
   };
 
-  /* ─── Loading ─── */
-
   if (loading && signals.length === 0) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0B0F19]">
@@ -99,8 +97,6 @@ export default function Dashboard() {
       </div>
     );
   }
-
-  /* ─── Empty ─── */
 
   if (!loading && signals.length === 0) {
     return (
@@ -117,14 +113,10 @@ export default function Dashboard() {
     );
   }
 
-  /* ─── Dashboard ─── */
-
   return (
     <div className="min-h-screen bg-[#0B0F19] text-gray-300">
-      {/* ── Header ── */}
       <header className="sticky top-0 z-10 border-b border-gray-800 bg-[#0B0F19]">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-          {/* Left — brand */}
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 ring-1 ring-emerald-500/20">
               <svg
@@ -165,7 +157,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Right — actions */}
           <div className="flex items-center gap-2">
             <span className="hidden rounded bg-emerald-500/10 px-2 py-1 text-[11px] font-medium text-emerald-400 sm:inline-flex">
               ● Live
