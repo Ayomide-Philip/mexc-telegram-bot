@@ -1,3 +1,5 @@
+import { state } from "./telegram";
+
 export type ParsedSignal =
   | {
       symbol: string | null;
@@ -41,6 +43,21 @@ export function parseSignal(raw: string, ts?: number): ParsedSignal {
   const slMatch = text.match(/SL:?\s*(\d+\.\d+)/i);
   const stopLoss = slMatch ? parseFloat(slMatch[1]) : null;
 
+  const findCurrency = state.signals.find((s) =>
+    isSameSignal(s, {
+      symbol,
+      side,
+      entry,
+      stopLoss,
+      takeProfits: [],
+      leverage: null,
+      raw: text,
+      ts,
+    }),
+  );
+
+  if (findCurrency) return;
+
   const tpMatches = [...text.matchAll(/TP\d*:?\s*(\d+\.\d+)/gi)];
   const takeProfits = tpMatches.map((m) => parseFloat(m[1]));
 
@@ -57,4 +74,14 @@ export function parseSignal(raw: string, ts?: number): ParsedSignal {
     raw: text,
     ts,
   };
+}
+
+function isSameSignal(a: ParsedSignal, b: ParsedSignal): boolean {
+  if (!a || !b) return false;
+  return (
+    a.symbol === b.symbol &&
+    a.side === b.side &&
+    a.entry === b.entry &&
+    a.stopLoss === b.stopLoss
+  );
 }

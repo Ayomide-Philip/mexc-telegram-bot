@@ -46,7 +46,7 @@ export async function startTelegramListener() {
       }
     },
     new NewMessage({
-      chats: [-1002004401199, -1002429499066, "testingtelegramsignals"],
+      chats: [-1002004401199, "testingtelegramsignals"],
     }),
   );
 
