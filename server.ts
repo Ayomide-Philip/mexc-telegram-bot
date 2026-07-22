@@ -19,9 +19,9 @@ export const state = {
 
 async function startTelegramListener() {
   const client = new TelegramClient(
-    new StringSession(process.env.TG_SESSION!),
-    Number(process.env.TG_API_ID),
-    process.env.TG_API_HASH!,
+    new StringSession(process.env.TELEGRAM_SESSION_STRING!),
+    Number(process.env.TELEGRAM_API_ID),
+    process.env.TELEGRAM_API_HASH!,
     { connectionRetries: 5 },
   );
 
