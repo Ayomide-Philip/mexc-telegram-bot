@@ -38,6 +38,7 @@ export async function startTelegramListener() {
       state.processedMessageIds.add(msgId);
 
       const text = event.message.message;
+      console.log("New message received:", text);
       console.log("New signal:", parseSignal(text));
       const parsedSignal = parseSignal(text, Date.now());
       if (parsedSignal) {
