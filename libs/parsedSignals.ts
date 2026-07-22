@@ -1,0 +1,58 @@
+export type ParsedSignal = {
+  symbol: string | null;
+  side: "long" | "short" | null;
+  entry: string | null; // "CMP" or a number/range as a string
+  stopLoss: number | null;
+  takeProfits: number[];
+  leverage: string | null;
+  raw: string;
+  ts?: number; // timestamp when the signal was parsed
+};
+
+export function parseSignal(raw: string, ts?: number): ParsedSignal {
+  const text = raw;
+
+  // Symbol: either "$WORD" or "WORD/USDT"
+  const symbolMatch =
+    text.match(/\$([A-Za-z0-9]+)/) || text.match(/([A-Za-z0-9]+)\s*\/USDT/i);
+  const symbol = symbolMatch ? symbolMatch[1].toUpperCase() : null;
+
+  // Side
+  const side = /short/i.test(text)
+    ? "short"
+    : /long|buy/i.test(text)
+      ? "long"
+      : null;
+
+  // Entry: either "CMP" (market price) or a number/range
+  let entry: string | null = null;
+  if (/CMP/i.test(text)) {
+    entry = "CMP";
+  } else {
+    const rangeMatch = text.match(/(\d+\.\d+)\s*[-–]\s*(\d+\.\d+)/);
+    if (rangeMatch) entry = `${rangeMatch[1]}-${rangeMatch[2]}`;
+  }
+
+  // Stop loss
+  const slMatch = text.match(/SL:?\s*(\d+\.\d+)/i);
+  const stopLoss = slMatch ? parseFloat(slMatch[1]) : null;
+
+  // Take profits — could be one "TP" or multiple "TP1"/"TP2"
+  const tpMatches = [...text.matchAll(/TP\d*:?\s*(\d+\.\d+)/gi)];
+  const takeProfits = tpMatches.map((m) => parseFloat(m[1]));
+
+  // Leverage
+  const levMatch = text.match(/(\d+)x/i);
+  const leverage = levMatch ? `${levMatch[1]}x` : null;
+
+  return {
+    symbol,
+    side,
+    entry,
+    stopLoss,
+    takeProfits,
+    leverage,
+    raw: text,
+    ts,
+  };
+}

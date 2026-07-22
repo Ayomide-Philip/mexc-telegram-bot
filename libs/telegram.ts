@@ -2,10 +2,11 @@
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions";
 import { NewMessage } from "telegram/events";
+import { ParsedSignal, parseSignal } from "./parsedSignals";
 
 type BotState = {
   processedMessageIds: Set<number>;
-  signals: { text: string; ts: number }[];
+  signals: ParsedSignal[];
 };
 
 declare global {
@@ -37,11 +38,11 @@ export async function startTelegramListener() {
       state.processedMessageIds.add(msgId);
 
       const text = event.message.message;
-      console.log("New signal:", text);
-      state.signals.push({ text, ts: Date.now() });
+      console.log("New signal:", parseSignal(text));
+      state.signals.push({ ...parseSignal(text, Date.now()) });
     },
     new NewMessage({
-      chats: ["cosmasanalyst", "LeveragLab", "testingtelegramsignals"],
+      chats: [-1002004401199, -1002429499066, "testingtelegramsignals"],
     }),
   );
 
