@@ -6,7 +6,7 @@ import { ParsedSignal, parseSignal } from "./parsedSignals";
 
 type BotState = {
   processedMessageIds: Set<number>;
-  signals: ParsedSignal[];
+  signals: NonNullable<ParsedSignal>[];
 };
 
 declare global {

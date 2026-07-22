@@ -28,6 +28,7 @@ export function parseSignal(raw: string, ts?: number): ParsedSignal {
       ? "long"
       : null;
 
+  if (!side) return;
   // Entry: either "CMP" (market price) or a number/range
   let entry: string | null = null;
   if (/CMP/i.test(text)) {
