@@ -29,7 +29,9 @@ export async function startTelegramListener() {
       console.log("New signal:", text);
       state.signals.push({ text, ts: Date.now() });
     },
-    new NewMessage({ chats: ["your_channel_username"] }),
+    new NewMessage({
+      chats: ["cosmasanalyst", "LeveragLab", "testingtelegramsignals"],
+    }),
   );
 
   console.log("Telegram listener running");
