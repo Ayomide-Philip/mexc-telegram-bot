@@ -37,17 +37,14 @@ export function parseSignal(raw: string, ts?: number): ParsedSignal {
     if (rangeMatch) entry = `${rangeMatch[1]}-${rangeMatch[2]}`;
   }
 
-  // Stop loss
   const slMatch = text.match(/SL:?\s*(\d+\.\d+)/i);
   const stopLoss = slMatch ? parseFloat(slMatch[1]) : null;
 
-  // Take profits — could be one "TP" or multiple "TP1"/"TP2"
   const tpMatches = [...text.matchAll(/TP\d*:?\s*(\d+\.\d+)/gi)];
   const takeProfits = tpMatches.map((m) => parseFloat(m[1]));
 
-  // Leverage
   const levMatch = text.match(/(\d+)x/i);
-  const leverage = levMatch ? `${levMatch[1]}x` : null;
+  const leverage = levMatch ? `${levMatch[1]}x` : "5x";
 
   return {
     symbol,
