@@ -3,10 +3,21 @@ import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions";
 import { NewMessage } from "telegram/events";
 
-export const state = {
-  processedMessageIds: new Set<number>(),
-  signals: [] as { text: string; ts: number }[],
+type BotState = {
+  processedMessageIds: Set<number>;
+  signals: { text: string; ts: number }[];
 };
+
+declare global {
+  var __botState: BotState | undefined;
+}
+
+export const state: BotState =
+  globalThis.__botState ??
+  (globalThis.__botState = {
+    processedMessageIds: new Set(),
+    signals: [],
+  });
 
 export async function startTelegramListener() {
   const client = new TelegramClient(
